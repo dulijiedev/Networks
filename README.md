@@ -14,5 +14,5 @@ allprojects {
   
 Step 2. Add the dependency
 dependencies {
-	        implementation 'com.github.dulijiedev:Networks:v1.0.0'
+	        implementation 'com.github.dulijiedev:Networks:v1.0.2'
 	}
