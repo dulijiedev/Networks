@@ -1,5 +1,6 @@
 package com.dol.networklib
 
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
@@ -18,6 +19,8 @@ import java.util.concurrent.TimeUnit
 class NetUtils {
 
     companion object {
+        var interceptors= mutableListOf<Interceptor>()
+
         private var instance: NetUtils? = null
             get() {
                 if (field == null) {
@@ -43,11 +46,18 @@ class NetUtils {
             .readTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(5, TimeUnit.SECONDS)
 
+        if(interceptors.isNotEmpty()){
+            interceptors.forEach {
+                okHttpClientBuilder.addInterceptor(it)
+            }
+        }
         if (BuildConfig.DEBUG) {
             okHttpClientBuilder.addNetworkInterceptor(logInterceptor)
         }
         return okHttpClientBuilder.build()
     }
+
+
 
     private fun createRetrofit(baseUrl: String, converterFactory: Converter.Factory): Retrofit {
         return Retrofit.Builder()
